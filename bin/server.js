@@ -3,6 +3,7 @@
 /**
  * Module dependencies.
  */
+require('@splunk/otel/instrument');
 
 var app = require('../app');
 //var debug = require('debug')('pacman:server');
