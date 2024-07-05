@@ -9,12 +9,13 @@ WORKDIR /usr/src/app
 # Clone game source code
 RUN git clone https://github.com/wedge22/pacman.git .
 
-# Install the @splunk/otel package
+# Install app dependencies including @splunk/otel package
 RUN npm install @splunk/otel
-# Set appropriate permissions
-RUN chmod -R go+r /node_modules/@splunk/otel
 
-# Install app dependencies
+# Set appropriate permissions
+RUN chmod -R go+r /usr/src/app/node_modules/@splunk/otel
+
+# Install remaining app dependencies
 RUN npm install
 
 # Expose port 8080
