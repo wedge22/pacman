@@ -9,9 +9,6 @@ WORKDIR /usr/src/app
 # Clone game source code
 RUN git clone https://github.com/wedge22/pacman.git .
 
-# Copy package.json and package-lock.json to the working directory
-COPY package.json package-lock.json ./
-
 # Install app dependencies including @splunk/otel package
 RUN npm install @splunk/otel
 RUN npm install
