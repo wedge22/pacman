@@ -23,4 +23,4 @@ COPY . .
 EXPOSE 8080
 
 # Run container with OpenTelemetry initialization
-CMD ["node", "-r", "@splunk/otel/instrument", "bin/server.js"]
+CMD ["node", "-r", "@splunk/otel/instrument", "bin/server.js", "lib/database.js"]
