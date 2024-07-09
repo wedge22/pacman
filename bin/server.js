@@ -32,16 +32,14 @@ server.on('error', onError);
 server.on('listening', onListening);
 
 /**
- * Serve the configuration script
+ * Serve the index.html file with injected environment variables
  */
-app.get('/config.js', (req, res) => {
-    res.setHeader('Content-Type', 'application/javascript');
-    res.send(`
-        window.OTEL_REALM = '${process.env.OTEL_REALM}';
-        window.OTEL_RUM_TOKEN = '${process.env.OTEL_RUM_TOKEN}';
-        window.OTEL_SERVICE_NAME = '${process.env.OTEL_SERVICE_NAME}';
-        window.OTEL_ENV_NAME = '${process.env.OTEL_ENV_NAME}';
-    `);
+app.get('/', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '../index.html'), {
+        headers: {
+            'Content-Type': 'text/html'
+        }
+    });
 });
 
 /**
