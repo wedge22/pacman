@@ -5,21 +5,6 @@
 <head>
     <meta charset="utf-8" />
     <title>Pac-Man</title>
-     <!-- Load the configuration from the external JavaScript file -->
-     <script src="/config.js"></script>
-     <!-- Splunk RUM JavaScript snippet -->
-     <script>
-         (function(w,d,u){
-             w.SplunkRumConfig = {
-                 beaconUrl: 'https://rum-ingest.' + window.OTEL_REALM + '.splunk.com/v1/rum',
-                 rumAuth: window.OTEL_RUM_TOKEN,
-                 app: window.OTEL_SERVICE_NAME,
-                 environment: window.OTEL_ENV_NAME
-             };
-             var s=d.createElement('script');s.async=1;s.src=u;
-             var h=d.getElementsByTagName('script')[0];h.parentNode.insertBefore(s,h);
-         })(window,document,'https://cdn.rum.splunk.com/rum.js');
-     </script>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="pacman-canvas.css">
 

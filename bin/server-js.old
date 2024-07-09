@@ -7,8 +7,6 @@
 var app = require('../app');
 //var debug = require('debug')('pacman:server');
 var http = require('http');
-const path = require('path');
-require('dotenv').config({ path: path.resolve(__dirname, '../.env') }); // Load environment variables from .env file
 
 /**
  * Get port from environment and store in Express.
@@ -30,19 +28,6 @@ var server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
-
-/**
- * Serve the configuration script
- */
-app.get('/config.js', (req, res) => {
-    res.setHeader('Content-Type', 'application/javascript');
-    res.send(`
-        window.OTEL_REALM = '${process.env.OTEL_REALM}';
-        window.OTEL_RUM_TOKEN = '${process.env.OTEL_RUM_TOKEN}';
-        window.OTEL_SERVICE_NAME = '${process.env.OTEL_SERVICE_NAME}';
-        window.OTEL_ENV_NAME = '${process.env.OTEL_ENV_NAME}';
-    `);
-});
 
 /**
  * Normalize a port into a number, string, or false.
