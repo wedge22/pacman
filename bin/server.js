@@ -36,7 +36,7 @@ server.on('listening', onListening);
  * Serve the index.html file with injected environment variables
  */
 app.get('/', (req, res) => {
-    fs.readFile(path.resolve(__dirname, '../index.html'), 'utf8', (err, data) => {
+    fs.readFile(path.resolve(__dirname, '../public/index.html'), 'utf8', (err, data) => {
         if (err) {
             res.status(500).send('Error reading index.html');
             return;
