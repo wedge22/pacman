@@ -6,13 +6,21 @@
     <meta charset="utf-8" />
     <title>Pac-Man</title>
      <!-- Splunk RUM JavaScript snippet -->
-     <script src="https://cdn.signalfx.com/o11y-gdi-rum/v0.19.0/splunk-otel-web.js" integrity="sha384-i+kd0TdSLVAgNiSnl7C3S++jvYeFIbMo69gVrkwh51KFr15dYVHXRnLPcB2rZMZX" crossorigin="anonymous"></script>
+    <script src="https://cdn.signalfx.com/o11y-gdi-rum/v0.19.0/splunk-otel-web.js" integrity="sha384-i+kd0TdSLVAgNiSnl7C3S++jvYeFIbMo69gVrkwh51KFr15dYVHXRnLPcB2rZMZX" crossorigin="anonymous"></script>
     <script>
+        const env = {
+            OTEL_REALM: '<%= OTEL_REALM %>',
+            OTEL_RUM_TOKEN: '<%= OTEL_RUM_TOKEN %>',
+            OTEL_SERVICE_NAME: '<%= OTEL_SERVICE_NAME %>',
+            OTEL_VERSION: '<%= OTEL_VERSION %>',
+            OTEL_ENV_NAME: '<%= OTEL_ENV_NAME %>'
+        };
+
         SplunkRum.init({
             realm: env.OTEL_REALM,
             rumAccessToken: env.OTEL_RUM_TOKEN,
             applicationName: env.OTEL_SERVICE_NAME,
-	        version: env.OTEL_VERSION,
+            version: env.OTEL_VERSION,
             deploymentEnvironment: env.OTEL_ENV_NAME,
             debug: true
             // Any additional settings
