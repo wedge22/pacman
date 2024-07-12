@@ -45,6 +45,7 @@ app.get('/', (req, res) => {
             .replace('<%= process.env.OTEL_REALM %>', process.env.OTEL_REALM)
             .replace('<%= process.env.OTEL_RUM_TOKEN %>', process.env.OTEL_RUM_TOKEN)
             .replace('<%= process.env.OTEL_SERVICE_NAME %>', process.env.OTEL_SERVICE_NAME)
+            .replace('<%= process.env.OTEL_VERSION %>', process.env.OTEL_VERSION)
             .replace('<%= process.env.OTEL_ENV_NAME %>', process.env.OTEL_ENV_NAME);
         res.send(injectedData);
     });
