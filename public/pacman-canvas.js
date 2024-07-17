@@ -13,6 +13,8 @@
 
 "use strict";
 
+import {trace} from '@opentelemetry/api'
+
 function geronimo() {
 /* ----- Global Variables ---------------------------------------- */
     var canvas;
@@ -161,7 +163,12 @@ function geronimo() {
     }
 
     function addHighscore() {
-        const span = tracer.startSpan('addHighscore');
+        const tracer = trace.getTracer('appModuleLoader');
+        const span = tracer.startSpan('addHighscore', {
+            attributes: {
+                'workflow.name': 'addHighscore'
+            }
+        });
         try {
             var name = $("input[type=text]").val();
             span.setAttribute('playerName', name);
