@@ -13,15 +13,6 @@
 
 "use strict";
 
-import { trace } from '@opentelemetry/api';
-import { start } from '@splunk/otel';
-
-// Initialize Splunk RUM and OpenTelemetry tracer
-start({
-  serviceName: 'pacman-ksh',
-});
-
-const tracer = trace.getTracer('appModuleLoader');
 
 function geronimo() {
 /* ----- Global Variables ---------------------------------------- */
@@ -171,7 +162,6 @@ function geronimo() {
     }
 
     function addHighscore() {
-        const tracer = trace.getTracer('appModuleLoader');
         const span = tracer.startSpan('addHighscore', {
             attributes: {
                 'workflow.name': 'addHighscore'
