@@ -161,10 +161,25 @@ function geronimo() {
     }
 
     function addHighscore() {
-        var name = $("input[type=text]").val();
-        $("#highscore-form").html("Saving highscore...");
-        ajaxAdd(name, game.cloudProvider, game.zone, game.host,
-                 game.score.score, game.level);
+        const span = tracer.startSpan('addHighscore');
+        try {
+            var name = $("input[type=text]").val();
+            span.setAttribute('playerName', name);
+            span.setAttribute('cloudProvider', game.cloudProvider);
+            span.setAttribute('zone', game.zone);
+            span.setAttribute('host', game.host);
+            span.setAttribute('score', game.score.score);
+            span.setAttribute('level', game.level);
+    
+            $("#highscore-form").html("Saving highscore...");
+            ajaxAdd(name, game.cloudProvider, game.zone, game.host, game.score.score, game.level);
+        } catch (error) {
+            span.setAttribute('error', true);
+            span.setAttribute('errorMessage', error.message);
+            throw error;
+        } finally {
+            span.end();
+        }
     }
 
     function getUserId() {
