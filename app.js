@@ -1,4 +1,5 @@
-import { SplunkRum } from '@splunk/rum'; 
+const SplunkRum = require('@splunk/rum');
+ 
 // Initialize Splunk RUM 
 SplunkRum.init({ 
     beaconUrl: 'https://rum-ingest.us1.signalfx.com/v1/rum', 
