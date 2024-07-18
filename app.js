@@ -1,5 +1,5 @@
-const SplunkRum = require('@splunk/rum');
- 
+const { SplunkRum } = require('@splunk/otel-web');
+
 // Initialize Splunk RUM 
 SplunkRum.init({ 
     beaconUrl: 'https://rum-ingest.us1.signalfx.com/v1/rum', 
