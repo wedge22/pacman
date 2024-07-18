@@ -1,3 +1,13 @@
+import { SplunkRum } from '@splunk/rum'; 
+// Initialize Splunk RUM 
+SplunkRum.init({ 
+    beaconUrl: 'https://rum-ingest.us1.signalfx.com/v1/rum', 
+    rumAuth: 'bRa9gAn966GFzFeIIgw0rg', 
+    app: 'ksh-pacman', 
+    environment: 'lab', 
+    version: '1.0' });
+    
+
 'use strict';
 
 var express = require('express');
