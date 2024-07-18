@@ -13,6 +13,8 @@
 
 "use strict";
 
+// pacman-canvas.js 
+const { tracer } = require('../app'); // Adjust the path according to your directory
 
 function geronimo() {
 /* ----- Global Variables ---------------------------------------- */

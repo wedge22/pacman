@@ -8,6 +8,9 @@ SplunkRum.init({
     environment: 'lab', 
     version: '1.0' });
     
+// Export tracer if needed in other files
+module.exports = { tracer: SplunkRum.tracer };
+    
 
 'use strict';
 
