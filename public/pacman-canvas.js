@@ -13,8 +13,10 @@
 
 "use strict";
 
-// Require Splunk RUM instrumentation
-require('../splunk-instrumentation');
+// Dynamically load Splunk RUM instrumentation script
+var script = document.createElement('script');
+script.src = '../splunk-instrumentation.js';
+document.head.appendChild(script);
 
 function geronimo() {
 /* ----- Global Variables ---------------------------------------- */
