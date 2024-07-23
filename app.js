@@ -1,18 +1,4 @@
-const { SplunkRum } = require('@splunk/otel-web');
-
-// Initialize Splunk RUM 
-SplunkRum.init({ 
-    beaconUrl: 'https://rum-ingest.us1.signalfx.com/v1/rum', 
-    rumAuth: 'bRa9gAn966GFzFeIIgw0rg', 
-    app: 'ksh-pacman', 
-    environment: 'lab', 
-    version: '1.0' });
-    
-// Export tracer if needed in other files
-module.exports = { tracer: SplunkRum.tracer };
-    
-
-'use strict';
+ 'use strict';
 
 var express = require('express');
 var path = require('path');
