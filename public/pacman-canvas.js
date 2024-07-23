@@ -15,6 +15,7 @@
 
 // Dynamically load Splunk RUM instrumentation script
 var script = document.createElement('script');
+script.type = 'module';
 script.src = '../splunk-instrumentation.js';
 document.head.appendChild(script);
 
