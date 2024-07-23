@@ -13,6 +13,9 @@
 
 "use strict";
 
+// Require Splunk RUM instrumentation
+require('../splunk-instrumentation');
+
 function geronimo() {
 /* ----- Global Variables ---------------------------------------- */
     var canvas;
