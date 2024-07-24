@@ -1,4 +1,4 @@
-import SplunkOtelWeb from 'https://unpkg.com/@splunk/otel-web@0.19.0/dist/index.js';
+import SplunkOtelWeb from 'https://cdn.signalfx.com/o11y-gdi-rum/0.19.0/splunk-otel-web.js';
 
 SplunkOtelWeb.init({ 
     realm: "us1", 
