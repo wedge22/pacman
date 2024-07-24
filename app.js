@@ -19,6 +19,9 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
+// Serve static files from the root directory 
+app.use(express.static(path.join(__dirname))); 
+
 // Handle root web server's public directory
 app.use('/', express.static(path.join(__dirname, 'public')));
 
