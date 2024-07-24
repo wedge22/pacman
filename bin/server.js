@@ -7,9 +7,6 @@
 var app = require('../app');
 //var debug = require('debug')('pacman:server');
 var http = require('http');
-const path = require('path');
-const fs = require('fs');
-require('dotenv').config({ path: path.resolve(__dirname, '../.env') }); // Load environment variables from .env file
 
 /**
  * Get port from environment and store in Express.
@@ -31,25 +28,6 @@ var server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
-
-/**
- * Serve the index.html file with injected environment variables
- */
-app.get('/', (req, res) => {
-    fs.readFile(path.resolve(__dirname, '../public/index.html'), 'utf8', (err, data) => {
-        if (err) {
-            res.status(500).send('Error reading index.html');
-            return;
-        }
-        const injectedData = data
-            .replace('<%= process.env.OTEL_REALM %>', process.env.OTEL_REALM)
-            .replace('<%= process.env.OTEL_RUM_TOKEN %>', process.env.OTEL_RUM_TOKEN)
-            .replace('<%= process.env.OTEL_SERVICE_NAME %>', process.env.OTEL_SERVICE_NAME)
-            .replace('<%= process.env.OTEL_VERSION %>', process.env.OTEL_VERSION)
-            .replace('<%= process.env.OTEL_ENV_NAME %>', process.env.OTEL_ENV_NAME);
-        res.send(injectedData);
-    });
-});
 
 /**
  * Normalize a port into a number, string, or false.
