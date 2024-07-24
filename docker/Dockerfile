@@ -11,12 +11,10 @@ RUN git clone https://github.com/wedge22/pacman.git .
 
 # Install app dependencies including @splunk/otel package
 RUN npm install @splunk/otel
-RUN npm install @splunk/otel-web --save
 RUN npm install
 
 # Set appropriate permissions
 RUN chmod -R go+r /usr/src/app/node_modules/@splunk/otel
-RUN chmod -R go+r /usr/src/app/node_modules/@splunk/otel-web
 
 # Copy the rest of the application code
 COPY . .
