@@ -5,8 +5,15 @@
 <head>
     <meta charset="utf-8" />
     <title>Pac-Man</title>
-    <!-- Import Splunk RUM instrumentation script from root directory -->
-    <script src="../splunk-instrumentation.js" type="module"></script>
+    <script src="https://cdn.signalfx.com/o11y-gdi-rum/0.19.0/splunk-otel-web.js" crossorigin="anonymous"></script>
+    <script>
+        SplunkRum.init({
+            realm: "us1",
+            rumAccessToken: "bRa9gAn966GFzFeIIgw0rg",
+            applicationName: "ksh-pacman",
+            deploymentEnvironment: "lab"
+        });
+    </script>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="pacman-canvas.css">
     
