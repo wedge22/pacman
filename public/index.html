@@ -16,6 +16,10 @@
        deploymentEnvironment: 'lab'
     });
 </script>
+<script>
+    const Provider = SplunkRum.provider;
+    var tracer=Provider.getTracer('appModuleLoader');
+</script>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="pacman-canvas.css">
     
