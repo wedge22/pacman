@@ -4,6 +4,9 @@
  * Module dependencies.
  */
 
+// Load environment variables
+require('dotenv').config();
+
 var app = require('../app');
 //var debug = require('debug')('pacman:server');
 var http = require('http');

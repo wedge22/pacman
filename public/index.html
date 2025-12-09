@@ -6,19 +6,19 @@
     <meta charset="utf-8" />
     <title>Pac-Man</title>
 <!-- Splunk RUM JavaScript snippet -->
-<script src="https://cdn.signalfx.com/o11y-gdi-rum/v0.19.0/splunk-otel-web.js" integrity="sha384-i+kd0TdSLVAgNiSnl7C3S++jvYeFIbMo69gVrkwh51KFr15dYVHXRnLPcB2rZMZX" crossorigin="anonymous"></script>
+<script src="https://cdn.signalfx.com/o11y-gdi-rum/v1.2.0/splunk-otel-web.js" crossorigin="anonymous"></script>
 <script>
-   SplunkRum.init({
-       realm: 'us1',
-       rumAccessToken: 'bRa9gAn966GFzFeIIgw0rg',
-       applicationName: 'ksh-pacman',
-       version: '1.0',
-       deploymentEnvironment: 'lab'
-    });
-</script>
-<script>
-    const Provider = SplunkRum.provider;
-    var tracer=Provider.getTracer('appModuleLoader');
+   // Load configuration from server
+   fetch('/config/client')
+       .then(response => response.json())
+       .then(config => {
+           if (config.splunkRum && config.splunkRum.rumAccessToken) {
+               SplunkRum.init(config.splunkRum);
+               window.Provider = SplunkRum.provider;
+               window.tracer = window.Provider.getTracer('appModuleLoader');
+           }
+       })
+       .catch(err => console.error('Failed to load configuration:', err));
 </script>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="pacman-canvas.css">
@@ -55,7 +55,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
 
     <!-- Script -->
-    <script src="js/jquery-3.4.1.min.js" type="text/javascript"></script>
+    <script src="js/jquery-3.7.1.min.js" type="text/javascript"></script>
     <script src="js/jquery.hammer.min.js" type="text/javascript"></script>
 
 </head>
