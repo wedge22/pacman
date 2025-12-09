@@ -25,8 +25,8 @@ npm run dev
 
 The [Dockerfile](docker/Dockerfile) performs the following steps:
 
-1. It is based on Node.js LTS Version 6 (Boron).
-1. It then clones the Pac-Man game into the configured application directory.
+1. It is based on Node.js LTS Version 20 (Alpine).
+1. It then copies the Pac-Man game into the configured application directory.
 1. Exposes port 8080 for the web server.
 1. Starts the Node.js application using `npm start`.
 

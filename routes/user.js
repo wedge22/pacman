@@ -1,12 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var bodyParser = require('body-parser');
 var ObjectId = require('mongodb').ObjectId;
 var Database = require('../lib/database');
-
-// create application/x-www-form-urlencoded parser
-var urlencodedParser = bodyParser.urlencoded({ extended: false })
-
 
 // middleware that is specific to this router
 router.use(function timeLog (req, res, next) {
@@ -26,9 +21,11 @@ router.get('/id', function(req, res, next) {
         db.collection('userstats').insertOne({
             date: Date()
         }, {
-           w: 'majority',
-           j: true,
-           wtimeout: 10000
+           writeConcern: {
+               w: 'majority',
+               j: true,
+               wtimeout: 10000
+           }
         }, function(err, result) {
            if (err) {
                console.log('failed to insert new user ID err =', err);
@@ -43,17 +40,73 @@ router.get('/id', function(req, res, next) {
 
 });
 
-router.post('/stats', urlencodedParser, function(req, res, next) {
+// Validation helper function
+function sanitizeString(str, maxLength) {
+    if (typeof str !== 'string') return '';
+    // Remove any HTML/script tags and trim
+    return str.replace(/<[^>]*>/g, '').trim().substring(0, maxLength);
+}
+
+router.post('/stats', function(req, res, next) {
     console.log('[POST /user/stats]\n',
                 ' body =', req.body, '\n',
                 ' host =', req.headers.host,
                 ' user-agent =', req.headers['user-agent'],
                 ' referer =', req.headers.referer);
 
-    var userScore = parseInt(req.body.score, 10),
-        userLevel = parseInt(req.body.level, 10),
-        userLives = parseInt(req.body.lives, 10),
-        userET = parseInt(req.body.elapsedTime, 10);
+    // Validate required fields
+    if (!req.body.userId) {
+        return res.status(400).json({
+            rs: 'error',
+            message: 'Missing required field: userId'
+        });
+    }
+
+    // Validate MongoDB ObjectId format
+    if (!ObjectId.isValid(req.body.userId)) {
+        return res.status(400).json({
+            rs: 'error',
+            message: 'Invalid userId format'
+        });
+    }
+
+    // Validate and parse numeric fields
+    var userScore = parseInt(req.body.score, 10);
+    if (isNaN(userScore) || userScore < 0 || userScore > 99999999) {
+        return res.status(400).json({
+            rs: 'error',
+            message: 'Score must be a valid number between 0 and 99999999'
+        });
+    }
+
+    var userLevel = parseInt(req.body.level, 10);
+    if (isNaN(userLevel) || userLevel < 1 || userLevel > 999) {
+        return res.status(400).json({
+            rs: 'error',
+            message: 'Level must be a valid number between 1 and 999'
+        });
+    }
+
+    var userLives = parseInt(req.body.lives, 10);
+    if (isNaN(userLives) || userLives < 0 || userLives > 99) {
+        return res.status(400).json({
+            rs: 'error',
+            message: 'Lives must be a valid number between 0 and 99'
+        });
+    }
+
+    var userET = parseInt(req.body.elapsedTime, 10);
+    if (isNaN(userET) || userET < 0 || userET > 86400) {
+        return res.status(400).json({
+            rs: 'error',
+            message: 'Elapsed time must be a valid number between 0 and 86400 seconds'
+        });
+    }
+
+    // Sanitize optional cloud metadata fields
+    var cloud = sanitizeString(req.body.cloud || 'unknown', 100);
+    var zone = sanitizeString(req.body.zone || 'unknown', 100);
+    var host = sanitizeString(req.body.host || 'unknown', 255);
 
     Database.getDb(req.app, function(err, db) {
         if (err) {
@@ -64,38 +117,39 @@ router.post('/stats', urlencodedParser, function(req, res, next) {
         db.collection('userstats').updateOne({
                 _id: new ObjectId(req.body.userId),
             }, { $set: {
-                    cloud: req.body.cloud,
-                    zone: req.body.zone,
-                    host: req.body.host,
+                    cloud: cloud,
+                    zone: zone,
+                    host: host,
                     score: userScore,
                     level: userLevel,
                     lives: userLives,
                     elapsedTime: userET,
                     date: Date(),
-                    referer: req.headers.referer,
-                    user_agent: req.headers['user-agent'],
+                    referer: req.headers.referer || '',
+                    user_agent: req.headers['user-agent'] || '',
                     hostname: req.hostname,
                     ip_addr: req.ip
                }, $inc: {
                     updateCounter: 1
                }
             }, {
-                w: 'majority',
-                j: true,
-                wtimeout: 10000
+                writeConcern: {
+                    w: 'majority',
+                    j: true,
+                    wtimeout: 10000
+                }
             }, function(err, result) {
-                var returnStatus = '';
-
                 if (err) {
                     console.log(err);
-                    returnStatus = 'error';
-                } else {
-                    console.log('Successfully updated user stats');
-                    returnStatus = 'success';
+                    return res.status(500).json({
+                        rs: 'error',
+                        message: 'Failed to update user stats'
+                    });
                 }
 
+                console.log('Successfully updated user stats');
                 res.json({
-                    rs: returnStatus
+                    rs: 'success'
                 });
         });
     });
