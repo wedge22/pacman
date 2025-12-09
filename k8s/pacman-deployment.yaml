@@ -1,0 +1,95 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pacman-config
+  labels:
+    app: pacman
+data:
+  MONGO_SERVICE_HOST: "mongo"
+  MONGO_DATABASE: "pacman"
+  MONGO_PORT: "27017"
+  # Add your Splunk RUM configuration here
+  # SPLUNK_RUM_REALM: "us1"
+  # SPLUNK_RUM_TOKEN: "your-token-here"
+  # SPLUNK_RUM_APP_NAME: "pacman"
+  # DEPLOYMENT_ENV: "kubernetes"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pacman
+  labels:
+    app: pacman
+    component: frontend
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  selector:
+    app: pacman
+    component: frontend
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pacman
+  labels:
+    app: pacman
+    component: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pacman
+      component: frontend
+  template:
+    metadata:
+      labels:
+        app: pacman
+        component: frontend
+    spec:
+      containers:
+      - name: pacman
+        image: pacman-nodejs-app:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: MY_NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: MY_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: MY_POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        envFrom:
+        - configMapRef:
+            name: pacman-config
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
